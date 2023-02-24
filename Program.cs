@@ -29,7 +29,7 @@ namespace LogFilesCleanupUtility
                 {
                     //FileInfo fi = new file;
                     //if (file.LastWriteTime < DateTime.Now.AddMinutes(Double.Parse(FileAge)))
-                    if (file.LastWriteTime < DateTime.Now.AddDays(Double.Parse(FileAge))) //can be in prod
+                    if (file.LastWriteTime < DateTime.Now.AddDays((-1) * Int32.Parse(FileAge))) //can be in prod
                         try
                         {
                             file.Delete();
