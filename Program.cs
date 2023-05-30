@@ -24,27 +24,23 @@ namespace LogFilesCleanupUtility
                 string files = path[t].ToString();
                 System.IO.DirectoryInfo di = new DirectoryInfo(files);
                 var count = 0;
-
-                foreach (FileInfo file in di.GetFiles())
-                {
-                    //FileInfo fi = new file;
-                    //if (file.LastWriteTime < DateTime.Now.AddMinutes(Double.Parse(FileAge)))
-                    if (file.LastWriteTime < DateTime.Now.AddDays((-1) * Int32.Parse(FileAge))) //can be in prod
-                        try
-                        {
+                try {
+                    foreach (FileInfo file in di.GetFiles())
+                    {
+                         if (file.LastWriteTime < DateTime.Now.AddDays((-1) * Int32.Parse(FileAge))) { //can be in prod
                             file.Delete();
                             count++;
-
                         }
-                        catch (Exception err)
-                        {
-                            throw err;
-                        }
-                        finally { }
+                    }
+                    var msg = count.ToString() + " in " + files + " have been deleted";
+                    LogWriter.LogMessageToFile(msg);
+                    mailbody = mailbody + msg + Environment.NewLine;
                 }
-                var msg = count.ToString() + " in " + files + " have been deleted";
-                LogWriter.LogMessageToFile(msg);
-                mailbody = mailbody + msg + Environment.NewLine;
+                catch (Exception err)
+                {
+                    throw err;
+                }
+                finally { }             
             }
             LogWriter.LogMessageToFile("Send email to TCMP ..." + DateTime.Now.ToString());
             mailbody = mailbody + DateTime.Now.ToString() + " Send email to TCMP ...";
